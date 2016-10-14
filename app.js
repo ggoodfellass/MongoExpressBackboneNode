@@ -1,9 +1,14 @@
 var Post = Backbone.Model.extend({
-  validate: function(attrs,opts){
-    if(attrs.title  && typeof attrs.title !== 'string'){
-      return "title should be a string";
-    }
-  },
-  urlRoot: '/posts'
+  
+  urlRoot: '/posts',
+  idAttribute: '_id'
+});
+var main= $('#main');
+var appView = Backbone.View.extend({
 
 });
+
+
+var post= new Post({_id: 1});
+
+post.fetch();

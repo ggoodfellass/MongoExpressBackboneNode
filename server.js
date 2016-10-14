@@ -3,29 +3,67 @@ var  express = require('express'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/posts');
-
-
-var Post = mongoose.model('Post', {title: String, description: String});
-
 
 app.use(express.static(__dirname + '/'));
+app.use(bodyParser.json());
 
-app.get('/',function(req,res){
-  
+
+
+mongoose.connect("mongodb://localhost/postmanager");
+var PostsSchema = new mongoose.Schema({
+  title : String,
+  description: String
 });
 
-app.post('/posts',function(req,res){
-  var post = new Post({title: req.body, description: req.body});
-  post.save(function(err,postObj){
-    if(err){
-      console.log('cannot save');
-    } else {
-      console.log('saved data');
-    }
-  })
-  res.json(post);
+var Posts = mongoose.model("posts",PostsSchema);
+
+app.get("/posts", function(req,res){
+  Posts.find({},function(err,docs){
+    if(err) throw err;
+    res.send(docs);
+  });
 });
+
+app.post("/posts", function(req, res){
+  var post = new Posts({
+    title :req.body,
+    description :req.body
+
+   }).save(function(err,docs){
+    if(err) throw err;
+    res.send(docs);
+  });
+   res.json(post);
+});
+
+app.put("/posts/:id", function(req,res){
+  var id = req.params.id;
+   var Post = Posts.findById(id, function(err, post) {
+      if(err) throw err;
+      post.title = req.body,
+      post.description = req.body
+      post.save(function(err) {
+        if(err) throw err;
+        res.send(post);
+      });
+    });
+  res.json(Post);
+});
+
+
+
+app.delete("/posts/:id", function(req,res){
+  var id = req.params.id;
+  Posts.findById(id, function(err, post) {
+      post.remove(function(err) {
+        if(err) throw err;
+
+      });
+    });
+});
+
+
+
 app.get('*',function(req,res){
   res.sendFile(__dirname + '/index.html');
 
