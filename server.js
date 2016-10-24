@@ -42,17 +42,11 @@ app.post("/posts", function(req, res){
 });
 
 app.put("/posts/:id", function(req,res){
-  var id = req.params.id;
-   var Post = Posts.findById(id, function(err, post) {
-      if(err) throw err;
-      post.title = req.body,
-      post.description = req.body
-      post.save(function(err) {
-        if(err) throw err;
-        res.send(post);
-      });
-    });
-  res.json(Post);
+  console.log('receive d an update req' + req.params.id);
+
+  Posts.update({_id: req.params.id},req.body,function(err){
+    res.send({_id: req.params.id})
+  })
 });
 
 

@@ -40,6 +40,14 @@ var PostView = Backbone.View.extend({
   update: function() {
     this.model.set('title', $('.title-update').val());
     this.model.set('description', $('.description-update').val());
+    this.model.save(null,{
+      success: function(response){
+        console.log('successfully updated with post_id' + response.toJSON()._id);
+      },
+      error: function(){
+        console.log('cannot updtae');
+      }
+    })
   },
   cancel: function() {
     postsView.render();
