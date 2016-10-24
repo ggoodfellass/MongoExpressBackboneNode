@@ -7,8 +7,6 @@ var Post = Backbone.Model.extend({
 
 var Posts = Backbone.Collection.extend({});
 
-
-
 var posts = new Posts();
 
 var PostView = Backbone.View.extend({
@@ -31,29 +29,38 @@ var PostView = Backbone.View.extend({
 
     var title = this.$('.title').html();
     var description = this.$('.description').html();
-    
 
     this.$('.title').html('<input type="text" class="form-control title-update" value="' + title + '">');
-    this.$('.title').html('<input type="text" class="form-control description-update" value="' + description + '">');
-
+    this.$('.description').html('<input type="text" class="form-control description-update" value="' + description + '">');
   },
   update: function() {
     this.model.set('title', $('.title-update').val());
     this.model.set('description', $('.description-update').val());
   },
+  cancel: function() {
+    postsView.render();
+  },
+  delete: function() {
+    this.model.destroy();
+  },
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   }
-
 });
-
 
 var PostsView = Backbone.View.extend({
   model: posts,
   el: $('.posts-list'),
-  initialize: function(){
-    this.model.on('add',this.render,this);
+  initialize: function() {
+    var self = this;
+    this.model.on('add', this.render, this);
+    this.model.on('change', function() {
+      setTimeout(function() {
+        self.render();
+      }, 30);
+    },this);
+    this.model.on('remove', this.render, this);
   },
   render: function() {
     var self = this;
@@ -67,12 +74,14 @@ var PostsView = Backbone.View.extend({
 
 var postsView = new PostsView();
 
-$(document).ready(function(){
-  $('.add-post').on('click',function(){
+$(document).ready(function() {
+  $('.add-post').on('click', function() {
     var post = new Post({
       title: $('.title-input').val(),
       description: $('.description-input').val()
     });
+    $('.title-input').val('');
+    $('.description-input').val('');
     console.log(post.toJSON());
     posts.add(post);
   })
