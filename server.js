@@ -22,6 +22,9 @@ app.get("/posts", function(req,res){
     if(err) throw err;
     res.send(docs);
   });
+  res.json(Object.keys(Posts).map(function(id){
+    return Posts[id];
+  }))
 });
 
 app.post("/posts", function(req, res){
