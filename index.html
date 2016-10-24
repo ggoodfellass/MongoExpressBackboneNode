@@ -26,9 +26,12 @@
         <th>Descriptions</th>
         <th>Actions</th>
       </tr>
-      <tr><td><input class="form-control title-input"></td>
-      <td><input class="form-control description-input"></td>
-      <td><button class="btn btn-primary add-post">Add</button></td></tr>
+      <tr>
+          
+          <td><input class="form-control title-input"></td>
+         <td><input class="form-control description-input"></td>
+          <td><button class="btn btn-primary add-post">Add</button></td>
+</tr>
     </thead>
     <tbody class="posts-list">
       
@@ -36,9 +39,10 @@
   </table>
 </div>
 <script type="text/template" class="posts-list-template">
-  <td><span class="title"><=% title %></span></td>
-  <td><span class="description"><=% description %></span></td>
-  <td><button class="btn btn-warning edit-post">Edit</button><button class="btn btn-danger delete-post"> Delete</button></td>
+  
+  <td><span class="title"><%= title %></span></td>
+  <td><span class="description"><%= descrition %></span></td>
+  <td><button class="btn btn-warning edit-post">Edit</button> <button class="btn btn-danger delete-post">Delete</button></td>
 
 </script>
 
