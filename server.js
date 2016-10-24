@@ -58,13 +58,10 @@ app.put("/posts/:id", function(req,res){
 
 
 app.delete("/posts/:id", function(req,res){
-  var id = req.params.id;
-  Posts.findById(id, function(err, post) {
-      post.remove(function(err) {
-        if(err) throw err;
-
-      });
-    });
+  console.log('received delete req for id:' + req.params.id);
+  Posts.remove({_id: req.params.id},function(err){
+    res.send({_id: req.params.id});
+  });
 });
 
 

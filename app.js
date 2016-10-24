@@ -1,3 +1,4 @@
+Backbone.Model.prototype.idAttribute = '_id';
 var Post = Backbone.Model.extend({
   defaults: {
     title: '',
@@ -6,7 +7,8 @@ var Post = Backbone.Model.extend({
 });
 
 var Posts = Backbone.Collection.extend({
-  url: 'http://localhost:3000/posts'
+  url: 'http://localhost:3000/posts',
+
 });
 
 var posts = new Posts();
@@ -43,7 +45,14 @@ var PostView = Backbone.View.extend({
     postsView.render();
   },
   delete: function() {
-    this.model.destroy();
+    this.model.destroy({
+      success: function(response){
+        console.log('successfully deleted with id :' + response.toJSON()._id);
+      },
+      error: function(){
+        console.log('cannot delete');
+      }
+    });
   },
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
