@@ -18,25 +18,27 @@ var PostsSchema = new mongoose.Schema({
 var Posts = mongoose.model("posts",PostsSchema);
 
 app.get("/posts", function(req,res){
-  Posts.find({},function(err,docs){
-    if(err) throw err;
-    res.send(docs);
+  Posts.find(function(err,docs){
+    docs.forEach(function(item){
+      console.log('REcived a Get request for _id' + item._id);
+
+    })
+    res.json(docs);
+
   });
-  res.json(Object.keys(Posts).map(function(id){
-    return Posts[id];
-  }))
+  
 });
 
 app.post("/posts", function(req, res){
-  var post = new Posts({
-    title :req.body,
-    description :req.body
-
-   }).save(function(err,docs){
-    if(err) throw err;
-    res.send(docs);
+  console.log('recived a Post reques');
+  for (var key in req.body){
+    console.log(key + ':' + req.body[key]);
+  }
+  var post = new Posts(req.body);
+  post.save(function(err,doc){
+    res.send(doc)
   });
-   res.json(post);
+
 });
 
 app.put("/posts/:id", function(req,res){

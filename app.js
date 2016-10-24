@@ -5,7 +5,9 @@ var Post = Backbone.Model.extend({
   }
 });
 
-var Posts = Backbone.Collection.extend({});
+var Posts = Backbone.Collection.extend({
+  url: 'http://localhost:3000/posts'
+});
 
 var posts = new Posts();
 
@@ -61,6 +63,17 @@ var PostsView = Backbone.View.extend({
       }, 30);
     },this);
     this.model.on('remove', this.render, this);
+    this.model.fetch({
+      success: function(response){
+        _.each(response.toJSON(),function(item){
+          console.log('successfully got post id with' + item._id);
+        });
+      },
+      error: function(){
+        console.log('failed to get ');
+      }
+    });
+
   },
   render: function() {
     var self = this;
@@ -84,5 +97,13 @@ $(document).ready(function() {
     $('.description-input').val('');
     console.log(post.toJSON());
     posts.add(post);
+    post.save(null,{
+      success: function(response){
+        console.log('successfully saved ' + response.toJSON()._id);
+      },
+      error: function(){
+        console.log('failed to save post');
+      }
+    });
   })
 })
